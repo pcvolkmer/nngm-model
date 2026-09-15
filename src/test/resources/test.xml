@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://nngm.medicalsyn.com">
+    <identifying-data>
+        <patient>
+            <vorname>Patrick</vorname>
+            <nachname>Tester</nachname>
+            <geburtstag>2000-01-01</geburtstag>
+            <geburtsmonat>01</geburtsmonat>
+            <geburtsjahr>2000</geburtsjahr>
+            <versicherungsnummer>A123456789</versicherungsnummer>
+        </patient>
+    </identifying-data>
+    <medical-data>
+        <patient>
+            <birthdate>2000-01-01</birthdate>
+            <gender>male</gender>
+        </patient>
+    </medical-data>
+</data>

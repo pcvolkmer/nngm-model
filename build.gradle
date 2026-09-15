@@ -1,0 +1,70 @@
+plugins {
+    id 'java'
+    id 'java-library'
+}
+
+group = "dev.pcvolkmer.nngm"
+version = "0.1.0"
+
+configurations {
+    xsd2java
+}
+
+ext {
+    jaxbTargetDir = file('src/generated/java') as File
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = [
+                    'src/main/java',
+                    jaxbTargetDir
+            ]
+        }
+    }
+}
+
+dependencies {
+    // JAXB code generation
+    xsd2java 'com.sun.xml.bind:jaxb-xjc:4.0.9'
+    xsd2java 'com.sun.xml.bind:jaxb-impl:4.0.9'
+
+    api platform('tools.jackson:jackson-bom:3.1.4')
+    api 'tools.jackson.dataformat:jackson-dataformat-xml'
+    api 'tools.jackson.module:jackson-module-jakarta-xmlbind-annotations'
+
+    api 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.5'
+
+    testImplementation(platform("org.junit:junit-bom:6.1.3"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.assertj:assertj-core:3.27.7")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.register('xsd2java') {
+
+    doLast {
+        jaxbTargetDir.mkdirs()
+
+        ant.taskdef(name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', classpath: configurations.xsd2java.asPath)
+        ant.jaxbTargetDir = jaxbTargetDir
+
+        ant.xjc(
+                destdir: "${jaxbTargetDir}",
+                package: 'dev.pcvolkmer.nngm.model.v1',
+                schema:  'src/main/resources/xsd/schema.xsd',
+                binding: 'src/main/resources/xsd/bindings.xjb',
+        )
+
+    }
+}
+compileJava.dependsOn xsd2java
+
+tasks.test {
+    useJUnitPlatform()
+}
