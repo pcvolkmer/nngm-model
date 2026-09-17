@@ -57,10 +57,9 @@ tasks.register('xsd2java') {
         ant.xjc(
                 destdir: "${jaxbTargetDir}",
                 package: 'dev.pcvolkmer.nngm.model.v1',
-                schema:  'src/main/resources/xsd/schema.xsd',
+                schema:  'https://nngm-demo.medicalsyn.com/api/v1/xml/schema?useNamedTypes=true',
                 binding: 'src/main/resources/xsd/bindings.xjb',
         )
-
     }
 }
 compileJava.dependsOn xsd2java
