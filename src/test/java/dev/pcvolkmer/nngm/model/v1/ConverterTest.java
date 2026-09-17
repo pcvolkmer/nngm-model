@@ -1,29 +1,12 @@
 package dev.pcvolkmer.nngm.model.v1;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import org.junit.jupiter.api.Test;
-import tools.jackson.databind.MapperFeature;
-import tools.jackson.databind.SerializationFeature;
-import tools.jackson.dataformat.xml.XmlMapper;
-import tools.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule;
 
-import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ConverterTest {
-
-    public static final XmlMapper XML_MAPPER =
-            XmlMapper.builder()
-                    .defaultUseWrapper(false)
-                    .defaultDateFormat(new SimpleDateFormat("yyyy-MM-dd"))
-                    .addModule(new JakartaXmlBindAnnotationModule())
-                    .disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
-                    .enable(SerializationFeature.INDENT_OUTPUT)
-                    .changeDefaultPropertyInclusion(
-                            incl -> incl.withValueInclusion(JsonInclude.Include.NON_EMPTY))
-                    .build();
 
     @Test
     void testSerialization() {
@@ -45,8 +28,17 @@ class ConverterTest {
 
         final var actual = Converter.fromXmlString(xml);
         assertThat(actual).isNotNull().satisfies(model -> {
-            assertThat(model.identifyingData.patient.vorname).isEqualTo("Patrick");
-            assertThat(model.identifyingData.patient.nachname).isEqualTo("Tester");
+            assertThat(model.identifyingData).satisfies(identifyingDataType -> {
+                assertThat(identifyingDataType.patient.vorname).isEqualTo("Patrick");
+                assertThat(identifyingDataType.patient.nachname).isEqualTo("Tester");
+            });
+            assertThat(model.medicalData).satisfies(medicalData -> {
+                assertThat(medicalData.nngmCase).hasSize(1);
+                assertThat(medicalData.nngmCase.getFirst()).satisfies(nngmCaseType -> {
+                    assertThat(nngmCaseType.nngmCaseId).isEqualTo("012345");
+                    assertThat(nngmCaseType.ecog.ecogGroup.ecog).isEqualTo(EcogEnumType.LA_9625_0);
+                });
+            });
         });
     }
 
