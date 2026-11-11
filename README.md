@@ -10,7 +10,11 @@ Local package build
 ./gradlew clean build
 ```
 
-### Maven
+### Maven Packages
+
+Pre-build packages for JDK 17+
+
+#### Maven
 
 ```xml
 
@@ -30,7 +34,7 @@ Local package build
 
 ```
 
-### Gradle
+#### Gradle
 
 ```gradle
 repositories {

@@ -34,7 +34,7 @@ class ConverterTest {
             });
             assertThat(model.medicalData).satisfies(medicalData -> {
                 assertThat(medicalData.nngmCase).hasSize(1);
-                assertThat(medicalData.nngmCase.getFirst()).satisfies(nngmCaseType -> {
+                assertThat(medicalData.nngmCase.get(0)).satisfies(nngmCaseType -> {
                     assertThat(nngmCaseType.nngmCaseId).isEqualTo("012345");
                     assertThat(nngmCaseType.ecog.ecogGroup.ecog).isEqualTo(EcogEnumType.LA_9625_0);
                 });

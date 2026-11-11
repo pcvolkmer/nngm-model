@@ -17,6 +17,12 @@ repositories {
     mavenCentral()
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
 sourceSets {
     main {
         java {
@@ -33,7 +39,7 @@ dependencies {
     xsd2java("com.sun.xml.bind:jaxb-xjc:4.0.9")
     xsd2java("com.sun.xml.bind:jaxb-impl:4.0.9")
 
-    api(platform("tools.jackson:jackson-bom:3.2.3"))
+    api(platform("tools.jackson:jackson-bom:3.1.7"))
     api("tools.jackson.dataformat:jackson-dataformat-xml")
     api("tools.jackson.module:jackson-module-jakarta-xmlbind-annotations")
 
