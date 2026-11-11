@@ -1,0 +1,27 @@
+name: 'Run Tests'
+
+on:
+  push:
+    branches: [ 'main' ]
+  schedule:
+    - cron: '0 0 * * 1'
+
+jobs:
+
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v6
+
+      # Java
+      - uses: actions/setup-java@v6
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+      - name: Publish to Maven repo
+        run: ./gradlew build publish -Pdnpm_dev_token=${{ secrets.DNPM_DEV_TOKEN }}
